@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "angular": "~1.0.7",
+    "angular-mocks": "~1.0.7",
+    "jquery": "~2.0.2",
+    "underscore": "~1.4.4"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}

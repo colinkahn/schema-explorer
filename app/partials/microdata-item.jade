@@ -1,0 +1,32 @@
+h2
+  a(href="", ng-init="root.shown = false", ng-click="root.shown = !root.shown") {{root.name}}
+
+div(ng-show="root.shown")
+  div(ng-show="root.types.length")
+    h3 Type
+    select(ng-options="type as type for type in root.types", ng-model="root.type")
+      option(value="") {{root.name}}
+
+  section(ng-repeat="prop in root.props", ng-init="itemprop = {}")
+    h3 {{prop}}
+    ul
+      li(ng-repeat="createdProp in root[prop]")
+        span {{createdProp | json}}
+        a(ng-click="removeFromList(createdProp, root[prop])") [X]
+
+
+    div(ng-repeat="attr in parseProperty(prop)")
+      label
+        span {{attr}}
+        input(ng-model="itemprop[attr]")
+
+    button(ng-click="addItemProp(root, prop, itemprop)") Add
+
+  h3 Available Schemas
+  ul#schemas
+    li(ng-repeat="schema in root.schemas")
+      button(ng-click="addSchema(schema, root)") {{schema.name}}
+
+  h3 Children
+  ul#design
+    li(ng-repeat="root in root.children", ng-include="'/partials/microdata-item.html'")
