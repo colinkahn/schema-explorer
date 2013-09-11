@@ -1,4 +1,4 @@
-APP.directive "mdEditor", ($parse, Item) ->
+APP.directive "mdEditor", ($parse, Item, schemas) ->
   restrict: "E"
   replace: true
   template: """ 
@@ -7,12 +7,11 @@ APP.directive "mdEditor", ($parse, Item) ->
     </ul>
   """
   scope:
-    schemas: "=mdEditorSchemas"
     editors: "=mdEditorEditors"
 
   link: ($scope, $element, $attrs) ->
-
-    $scope.root = new Item "root"
+    $scope.schemas = schemas
+    $scope.root    = new Item "root"
 
     rootGetter = $parse $attrs.mdEditorRoot
     rootSetter = rootGetter.assign
