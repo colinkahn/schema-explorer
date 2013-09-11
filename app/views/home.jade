@@ -1,11 +1,17 @@
-h1 {{msg}}
-
 div(ng-init="files = []")
+  div#file-viewer
+    .navbar.navbar-inverse: .navbar-inner
+      ul.nav
+        li
+          a(ng-click="files.push({})") New File
+        li(ng-repeat="file in files")
+          a(ng-click="$parent.focusedFile = file") {{file.name || "Untitled"}}
 
-  button.btn.btn-primary(ng-click="files.push({})") New File
+    div.code-preview(ng-repeat="file in files", ng-show="focusedFile == file")
+      pre.prettyprint.linenums(md-html-element="file.root.toHTML()")
 
-  .well(ng-repeat="file in files")
-    label
+  div#editor(ng-repeat="file in files", ng-show="focusedFile == file")
+    label(ng-show="false")
       span File Name
       input(ng-model="file.name", type="text", placeholder="File Name")
 
@@ -15,11 +21,3 @@ div(ng-init="files = []")
       md-editor-editors = "editors"
     )
 
-  div#file-viewer
-    .navbar.navbar-inverse: .navbar-inner
-      ul.nav
-        li(ng-repeat="file in files")
-          a(ng-click="$parent.focusedFile = file") {{file.name || "Untitled"}}
-
-    div(ng-repeat="file in files", ng-show="focusedFile == file")
-      pre.prettyprint.linenums(md-html-element="file.root.toHTML()")

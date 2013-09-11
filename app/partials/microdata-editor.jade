@@ -1,0 +1,70 @@
+div(ng-show="editing")
+  h3
+    span {{editing.itemProp}} = {{editing.id}}\#{{editing.elementId}}
+
+  .well
+    h4 Item Properties
+    section
+      label
+        span Linked Resource
+        input(ng-model="editing.linkedResource", type="checkbox")
+
+    section(ng-show="editing.linkedResource")
+      label
+        span Resource Url
+        input.input-mini(type="text", ng-model="editing.url")
+
+    section(ng-switch="editing.id", ng-hide="editing.linkedResource")
+      div(ng-switch-when="URL")
+        label
+          span Url
+          input.input-mini(type="url", ng-model="editing.url")
+
+        label
+          span Rel
+          input(type="text", ng-model="editing.rel")
+
+      div(ng-switch-when="Text")
+        label
+          span Text
+          input(type="Text", ng-model="editing.text")
+
+      label
+        span Tag
+        input(type="text", ng-model="editing.tag")
+
+  .well(ng-hide="editing.linkedResource")
+    h4 Child Element Creation
+    section
+      label
+        span Property
+        select(
+          ng-model="currentItemProp"
+        )
+          option(
+            ng-repeat = "itemProp in schemas.types[editing.id].properties"
+            value     = "{{schemas.properties[itemProp].id}}"
+          ) {{schemas.properties[itemProp].label}}
+
+        p {{schemas.properties[currentItemProp].comment_plain}}
+
+      label
+        span Property Type
+        select(
+          ng-model="currentItemPropId"
+        )
+          option(
+            ng-repeat = "range in schemas.properties[currentItemProp].ranges"
+          ) {{range}}
+
+      label
+        span Type
+        select(
+          ng-model="currentItemPropId"
+        )
+          option(
+            ng-repeat = "(type, def) in schemas.types"
+          ) {{type}}
+
+      button(ng-click="editing.appendItemProp(currentItemPropId, currentItemProp)") Add
+

@@ -1,9 +1,54 @@
 #file-viewer
   position fixed
   top 0
-  bottom 0
   right 0
-  width 600px
+  left 0
+  bottom 60%
+
+  .navbar
+    margin-bottom 0
+
+  .navbar-inner
+    border-radius 0
 
   .prettyprint
-    overflow-x scroll
+    border-radius 0
+    margin-bottom 0
+    min-height 100%
+    box-sizing border-box
+
+  .code-preview
+    position absolute
+    top 53px
+    bottom 0
+    left 0
+    right 0
+    overflow-y auto
+
+#editor
+  position fixed
+  top 40%
+  right 0
+  left 0
+  bottom 0
+
+.editor
+  height 100%
+  ul
+    list-style none
+
+.editor-tree
+  background #ECF0F1
+  height 100%
+  overflow-y auto
+  box-sizing border-box
+  padding 15px 25px
+
+  .editing
+    border 1px dotted #1ABC9C
+
+  .fui-arrow-right
+    transition all 1s ease
+
+  .fui-arrow-right.expanded
+    transform rotate(90deg)
