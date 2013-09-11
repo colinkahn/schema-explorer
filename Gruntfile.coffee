@@ -24,6 +24,12 @@ module.exports = (grunt) ->
             "app/scripts/app.coffee"
             "app/scripts/**/*.coffee"
           ]
+    copy:
+      assets:
+        expand: true
+        src: "app/assets/*"
+        dest: "build/assets/"
+        flatten: true
     concat:
       js:
         dest: "build/js/vendor.js"
@@ -142,6 +148,7 @@ module.exports = (grunt) ->
     "coffee"
     "stylus"
     "jade"
+    "copy"
     "concat"
     "clean"
   ]

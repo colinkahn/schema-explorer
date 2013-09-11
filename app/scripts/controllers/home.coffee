@@ -1,87 +1,42 @@
-APP.controller "HomeController", ($scope) ->
+APP.controller "HomeController", ($scope, $http, Schema) ->
   $scope.msg = "MicroData Api Editor"
-  $scope.schemas = [
-      name:    "/Map"
-      types:   ["/Map/Overworld", "/Map/Dungeon"]
-      props:   ["a:map-link"]
-      children: []
-      schemas: [
-          name:    "/Tile"
-          types:   ["/Tile/Rock", "/Tile/Tree", "/Tile/Water", "/Tile/Cave"]
-          props:   ["img:tile-piece", "a:map-link", "coords"]
-          children: []
-          schemas: []
-      ]
-    ]
 
-  $scope.root =
-    name: "Root"
-    children: []
-    schemas:  $scope.schemas
+  $http.get("/assets/all.json", resposeType: "json").then (response) ->
+    console.log schemas = response.data
+    $scope.schemas = schemas
 
-  $scope.addSchema = (schema, parent = $scope.root) ->
-    parent.children.push angular.copy schema
+  $scope.editors = [
+    name: "Debugger"
+    launch: (item) ->
+      console.log item
+  ]
 
-  extractPropertyTagAndName = (propertyName) ->
-    [tag, name] = propertyName.split ":"
-    if not name
-      name = tag
-      tag  = "span"
-
-    return [tag, name]
-
-  $scope.parseProperty = (propertyName) ->
-    [tag, name] = extractPropertyTagAndName propertyName
-
-    switch tag
-      when "a"
-        ["href", "rel", "text"]
-      when "img"
-        ["src", "alt"]
-      when "span"
-        ["text"]
-
-  $scope.removeFromList = (item, list) ->
-    index = list.indexOf item
-    list.splice index, 1 if angular.isNumber index
-
-  $scope.addItemProp = (item, prop, itemprop) ->
-    item[prop] ?= []
-    item[prop].push angular.copy itemprop
-
-  toHTML = (root, element = $("<div />")) ->
-    type = root.type or root.name
-    rootEl = $("<div itemscope itemtype='#{type}' />")
-    element.append rootEl
-
-    if root.props
-
-      for propName in root.props
-        [tag, name]   = extractPropertyTagAndName propName
-        propertyAttrs = $scope.parseProperty propName
-
-        if not root[propName]?.length
-          continue
+  toHTML = (children, parentEl = $("<div />")) ->
+    for item in children
+      type =
+        if item.id of $scope.schemas.datatypes
+          $scope.schemas.datatypes[item.id].url
         else
-          propsEl = $("<ul />")
-          rootEl.append propsEl
+          $scope.schemas.types[item.id].url
 
-          for itemprop in root[propName]
-            listEl = $("<li />")
-            propEl = $("<#{tag} itemprop='#{name}' />")
-            listEl.append propEl
-            for attr in propertyAttrs
-              if attr is "text"
-                propEl.text itemprop[attr]
-              else
-                propEl.attr attr, itemprop[attr]
+      tag = item.tag or "div"
 
-            propsEl.append listEl
+      itemEl = $("<#{tag} itemtype='#{type}' />")
+      parentEl.append itemEl
 
-    for child in root.children
-      toHTML(child, rootEl)
+      if item.id of $scope.schemas.types
+        itemEl.attr "itemscope", ""
 
-    return rootEl
+      if item.itemProp
+        itemEl.attr "itemprop", item.itemProp
+
+      if item.text
+        itemEl.text item.text
+
+      toHTML(item.children, itemEl)
+
+    return parentEl
 
   $scope.$watch ->
-    $scope.editorOutput = toHTML($scope.root).html()
+    return unless $scope.schemas and $scope.root?
+    $scope.editorOutput = toHTML($scope.root.children).html()

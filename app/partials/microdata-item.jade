@@ -1,32 +1,64 @@
 h2
-  a(href="", ng-init="root.shown = false", ng-click="root.shown = !root.shown") {{root.name}}
+  a(
+    href=""
+    ng-init="root.shown = false"
+    ng-click="root.shown = !root.shown"
+  ) {{root.itemProp}} = {{root.id}}
+
 
 div(ng-show="root.shown")
-  div(ng-show="root.types.length")
-    h3 Type
-    select(ng-options="type as type for type in root.types", ng-model="root.type")
-      option(value="") {{root.name}}
-
-  section(ng-repeat="prop in root.props", ng-init="itemprop = {}")
-    h3 {{prop}}
-    ul
-      li(ng-repeat="createdProp in root[prop]")
-        span {{createdProp | json}}
-        a(ng-click="removeFromList(createdProp, root[prop])") [X]
-
-
-    div(ng-repeat="attr in parseProperty(prop)")
+  section(ng-switch="root.id")
+    div(ng-switch-when="URL")
       label
-        span {{attr}}
-        input(ng-model="itemprop[attr]")
+        span Url
+        input(type="url", ng-model="root.url")
 
-    button(ng-click="addItemProp(root, prop, itemprop)") Add
+      label
+        span Rel
+        input(type="text", ng-model="root.rel")
 
-  h3 Available Schemas
-  ul#schemas
-    li(ng-repeat="schema in root.schemas")
-      button(ng-click="addSchema(schema, root)") {{schema.name}}
+    div(ng-switch-when="Text")
+      label
+        span Text
+        input(type="Text", ng-model="root.text")
+
+    label
+      span Tag
+      input(type="text", ng-model="root.tag")
+
+  section
+    label
+      span Property
+      select(
+        ng-model="currentItemProp"
+      )
+        option(
+          ng-repeat = "itemProp in schemas.types[root.id].properties"
+          value     = "{{schemas.properties[itemProp].id}}"
+        ) {{schemas.properties[itemProp].label}}
+
+      p {{schemas.properties[currentItemProp].comment_plain}}
+
+    label
+      span Property Type
+      select(
+        ng-model="currentItemPropId"
+      )
+        option(
+          ng-repeat = "range in schemas.properties[currentItemProp].ranges"
+        ) {{range}}
+
+    label
+      span Type
+      select(
+        ng-model="currentItemPropId"
+      )
+        option(
+          ng-repeat = "(type, def) in schemas.types"
+        ) {{type}}
+
+    button(ng-click="root.appendItemProp(currentItemPropId, currentItemProp)") Add
 
   h3 Children
-  ul#design
+  ul
     li(ng-repeat="root in root.children", ng-include="'/partials/microdata-item.html'")

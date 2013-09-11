@@ -2,7 +2,10 @@ h1 {{msg}}
 
 textarea(ng-model="editorOutput")
 
-ul
-  li(ng-include="'/partials/microdata-item.html'")
+md-editor(
+  md-editor-root    = "$parent.root"
+  md-editor-schemas = "schemas"
+  md-editor-editors = "editors"
+)
 
 
