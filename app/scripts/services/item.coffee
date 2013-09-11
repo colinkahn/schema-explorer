@@ -1,7 +1,12 @@
 APP.factory "Item", ["schemas", (schemas) ->
+
+  uid    = 0
+  getUID = -> uid++
+
   class Item
     constructor: (@id, @itemProp, @text) ->
-      @children = []
+      @elementId = @id.toLowerCase() + getUID()
+      @children  = []
 
     appendItemProp: (id, itemProp, value) ->
       @children.push new Item id, itemProp, value
@@ -31,9 +36,12 @@ APP.factory "Item", ["schemas", (schemas) ->
         element = $("<div/>")
       else
         json   = @toJSON()
-        element = $("<#{json.tag} itemtype='#{json.url}'/>")
+        if @linkedResource
+          element = $("<a href='#{@url or "#"}'/>")
+        else
+          element = $("<#{json.tag} itemtype='#{json.url}' id='#{@elementId}'/>")
 
-        element.attr "itemscope", "" unless @isDataType()
+        element.attr "itemscope", "" unless @isDataType() or @linkedResource
         element.attr "itemprop", json.itemProp if json.itemProp
         element.text json.text if json.text
 

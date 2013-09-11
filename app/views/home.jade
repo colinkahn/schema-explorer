@@ -1,11 +1,25 @@
 h1 {{msg}}
 
-textarea(ng-model="editorOutput")
+div(ng-init="files = []")
 
-md-editor(
-  md-editor-root    = "$parent.root"
-  md-editor-schemas = "schemas"
-  md-editor-editors = "editors"
-)
+  button.btn.btn-primary(ng-click="files.push({})") New File
 
+  .well(ng-repeat="file in files")
+    label
+      span File Name
+      input(ng-model="file.name", type="text", placeholder="File Name")
 
+    md-editor(
+      md-editor-root    = "$parent.file.root"
+      md-editor-schemas = "schemas"
+      md-editor-editors = "editors"
+    )
+
+  div#file-viewer
+    .navbar.navbar-inverse: .navbar-inner
+      ul.nav
+        li(ng-repeat="file in files")
+          a(ng-click="$parent.focusedFile = file") {{file.name || "Untitled"}}
+
+    div(ng-repeat="file in files", ng-show="focusedFile == file")
+      pre.prettyprint.linenums(md-html-element="file.root.toHTML()")

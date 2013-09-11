@@ -3,62 +3,73 @@ h2
     href=""
     ng-init="root.shown = false"
     ng-click="root.shown = !root.shown"
-  ) {{root.itemProp}} = {{root.id}}
-
+  ) {{root.itemProp}} = {{root.id}}\#{{root.elementId}}
 
 div(ng-show="root.shown")
-  section(ng-switch="root.id")
-    div(ng-switch-when="URL")
-      label
-        span Url
-        input(type="url", ng-model="root.url")
-
-      label
-        span Rel
-        input(type="text", ng-model="root.rel")
-
-    div(ng-switch-when="Text")
-      label
-        span Text
-        input(type="Text", ng-model="root.text")
-
-    label
-      span Tag
-      input(type="text", ng-model="root.tag")
-
   section
     label
-      span Property
-      select(
-        ng-model="currentItemProp"
-      )
-        option(
-          ng-repeat = "itemProp in schemas.types[root.id].properties"
-          value     = "{{schemas.properties[itemProp].id}}"
-        ) {{schemas.properties[itemProp].label}}
+      span Linked Resource
+      input(ng-model="root.linkedResource", type="checkbox")
 
-      p {{schemas.properties[currentItemProp].comment_plain}}
-
+  section(ng-show="root.linkedResource")
     label
-      span Property Type
-      select(
-        ng-model="currentItemPropId"
-      )
-        option(
-          ng-repeat = "range in schemas.properties[currentItemProp].ranges"
-        ) {{range}}
+      span Resource Url
+      input(type="text", ng-model="root.url")
 
-    label
-      span Type
-      select(
-        ng-model="currentItemPropId"
-      )
-        option(
-          ng-repeat = "(type, def) in schemas.types"
-        ) {{type}}
+  div(ng-hide="root.linkedResource")
 
-    button(ng-click="root.appendItemProp(currentItemPropId, currentItemProp)") Add
+    section(ng-switch="root.id")
+      div(ng-switch-when="URL")
+        label
+          span Url
+          input(type="url", ng-model="root.url")
 
-  h3 Children
-  ul
-    li(ng-repeat="root in root.children", ng-include="'/partials/microdata-item.html'")
+        label
+          span Rel
+          input(type="text", ng-model="root.rel")
+
+      div(ng-switch-when="Text")
+        label
+          span Text
+          input(type="Text", ng-model="root.text")
+
+      label
+        span Tag
+        input(type="text", ng-model="root.tag")
+
+    section
+      label
+        span Property
+        select(
+          ng-model="currentItemProp"
+        )
+          option(
+            ng-repeat = "itemProp in schemas.types[root.id].properties"
+            value     = "{{schemas.properties[itemProp].id}}"
+          ) {{schemas.properties[itemProp].label}}
+
+        p {{schemas.properties[currentItemProp].comment_plain}}
+
+      label
+        span Property Type
+        select(
+          ng-model="currentItemPropId"
+        )
+          option(
+            ng-repeat = "range in schemas.properties[currentItemProp].ranges"
+          ) {{range}}
+
+      label
+        span Type
+        select(
+          ng-model="currentItemPropId"
+        )
+          option(
+            ng-repeat = "(type, def) in schemas.types"
+          ) {{type}}
+
+      button(ng-click="root.appendItemProp(currentItemPropId, currentItemProp)") Add
+
+    h3 Children
+    ul
+      li(ng-repeat="root in root.children", ng-include="'/partials/microdata-item.html'")

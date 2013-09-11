@@ -1,6 +1,8 @@
-
+##
+## Schemas Service
+##
 APP.service "schemas", ($http) ->
-  schemas = loaded: false 
+  schemas = loaded: false
 
   $http.get("/assets/all.json", resposeType: "json").then (response) ->
     console.log response.data
