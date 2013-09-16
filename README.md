@@ -1,5 +1,5 @@
-# Board Builder
+# Schema Explorer
 
-Board builder using Microdata schemas, generating Microdata boards.
+WIP. AngularJS app for exploring schemas on http://schema.org
 
 
