@@ -3,7 +3,7 @@ div(ng-init="root.expanded = false")
     a(ng-click="root.expanded = !root.expanded")
       span.fui-arrow-right(ng-class="{expanded: root.expanded}")
 
-    a(ng-click="edit(root)", ng-class="{editing: isEditing(root)}")
+    a(ng-click="edit(root); root.expanded = true", ng-class="{editing: isEditing(root)}")
       span {{root.itemProp}} = {{root.id}}\#{{root.elementId}}
 
   ul(ng-show="root.expanded")

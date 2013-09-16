@@ -42,7 +42,7 @@ module.exports = (grunt) ->
           "vendor/bower/jquery/jquery.js"
           "vendor/bower/underscore/underscore.js"
           "vendor/bower/angular/angular.js"
-          # Flat UI JS
+          # Flat-UI JS
           "vendor/bower/flat-ui-official/js/jquery-ui-1.10.3.custom.min.js"
           "vendor/bower/flat-ui-official/js/jquery.ui.touch-punch.min.js"
           "vendor/bower/flat-ui-official/js/bootstrap.min.js"
@@ -54,6 +54,8 @@ module.exports = (grunt) ->
           "vendor/bower/flat-ui-official/js/jquery.placeholder.js"
           "vendor/bower/flat-ui-official/js/jquery.stacktable.js"
           "vendor/bower/flat-ui-official/js/application.js"
+          # Flat-UI Angular
+          "vendor/angular-fui.js"
         ]
       css:
         dest: "build/css/app.css"
@@ -99,7 +101,7 @@ module.exports = (grunt) ->
     watch:
       js:
         files: ["app/**/*.coffee"]
-        tasks: ["coffee"]
+        tasks: ["coffee", "concat"]
         options: interrupt: true
       css:
         files: ["app/**/*.styl", "app/**/**/*.styl"]

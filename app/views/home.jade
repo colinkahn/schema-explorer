@@ -1,11 +1,13 @@
 div(ng-init="files = []")
   div#file-viewer
     .navbar.navbar-inverse: .navbar-inner
+      span.brand Schema Explorer
       ul.nav
-        li
-          a(ng-click="files.push({})") New File
         li(ng-repeat="file in files")
           a(ng-click="$parent.focusedFile = file") {{file.name || "Untitled"}}
+
+      ul.nav.pull-right
+        li: a(ng-click="$parent.focusedFile = {}; files.push($parent.focusedFile)") New File
 
     div.code-preview(ng-repeat="file in files", ng-show="focusedFile == file")
       pre.prettyprint.linenums(md-html-element="file.root.toHTML()")
@@ -20,4 +22,3 @@ div(ng-init="files = []")
       md-editor-schemas = "schemas"
       md-editor-editors = "editors"
     )
-

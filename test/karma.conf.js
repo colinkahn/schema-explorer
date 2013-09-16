@@ -13,6 +13,7 @@ files = [
   '../vendor/bower/underscore/underscore.js',
   '../vendor/bower/angular/angular.js',
   '../vendor/bower/angular-mocks/angular-mocks.js',
+  '../vendor/angular-fui.js',
 
   'partials/*.html',
 

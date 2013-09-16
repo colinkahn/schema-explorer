@@ -2,19 +2,20 @@ APP.directive "mdEditor", ($parse, Item, schemas) ->
   restrict: "E"
   replace: true
   template: """ 
-    <section class="editor row-fluid">
-      <ul class="editor-tree span5">
+    <section class="editor">
+      <ul class="editor-tree">
         <li ng-include="'/partials/microdata-item.html'">
       </ul>
-      <div class="span5" ng-include="'/partials/microdata-editor.html'"></div>
+      <div class="editor-controls" ng-include="'/partials/microdata-editor.html'"></div>
     </section>
   """
   scope:
     editors: "=mdEditorEditors"
 
   link: ($scope, $element, $attrs) ->
-    $scope.schemas = schemas
-    $scope.root    = new Item "root"
+    $scope.schemas     = schemas
+    $scope.root        = new Item "root"
+    $scope.root.isRoot = true
 
     rootGetter = $parse $attrs.mdEditorRoot
     rootSetter = rootGetter.assign

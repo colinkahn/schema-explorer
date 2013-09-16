@@ -41,6 +41,11 @@ APP.factory "Item", ["schemas", (schemas) ->
         else
           element = $("<#{json.tag} itemtype='#{json.url}' id='#{@elementId}'/>")
 
+        if not @linkedResource and @url and json.tag in ["a", "link", "img"]
+          urlAttrName = json.tag is "a" and "href" or "src"
+          element.attr urlAttrName, @url
+
+        element.attr "rel", @rel if @rel
         element.attr "itemscope", "" unless @isDataType() or @linkedResource
         element.attr "itemprop", json.itemProp if json.itemProp
         element.text json.text if json.text
